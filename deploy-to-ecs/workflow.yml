@@ -1,0 +1,41 @@
+# Deploy to ECS Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      cluster_name:
+        required: true
+        type: string
+      cluster_region:
+        required: true
+        type: string
+      service_name: 
+        required: true
+        type: string
+      image_uri:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      docker_compose_file_name:
+        required: true
+        type: string
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - uses: marocchino/setup-ecs-cli@v1
+      with:
+        version: "v1.18.0"
+    - name: configure-ecs-cli
+      run: ecs-cli configure --cluster ${CLUSTER_NAME} --region ${CLUSTER_REGION} --default-launch-type FARGATE
+    - name: create-ecs-tasks
+      run: ecs-cli compose create --create-log-groups --launch-type FARGATE
+
+      
