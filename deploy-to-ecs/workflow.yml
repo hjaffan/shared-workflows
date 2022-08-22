@@ -37,5 +37,7 @@ jobs:
       run: ecs-cli configure --cluster ${CLUSTER_NAME} --region ${CLUSTER_REGION} --default-launch-type FARGATE
     - name: create-ecs-tasks
       run: ecs-cli compose create --create-log-groups --launch-type FARGATE
+    - name: create-ecs-service
+      run: ecs-cli compose service create -role ${ROLE} --target-groups ${TARGET_GROUP} --region ${REGION} --cluster ${CLUSTER} --create-log-groups --tags ${TAGS}
 
       
